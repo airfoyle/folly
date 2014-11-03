@@ -1,0 +1,69 @@
+2014-10-30:
+
+Why MultiSet instead of Multiset??
+
+An abstraction that might come in handy:  IteratorTree[+A] --
+An Iterator[AnyRef] iter plus an estimate est: Int of how many elements can be
+generated.  The object has mutable state, like any iterator.  In
+particular, it has a buffer of objects it has found but not yet
+"yielded." 
+
+The method tryNext returns the next object in the buffer (shortening
+it).  If the buffer is empty, hasNext checks if iter.hasNext(), and if
+so it stimulates iter, which generates either an A or a nonempty list
+containing As and IteratorTree[A]s.  In the first case it decrements
+est by 1 (unless the result is 0 and iter.hasNext() is true!).  In the
+second case it updates est to be the number of As produced + the sum
+of the ests of the IteratorTree[A]s produced.
+
+[Scala defensive programming: There's no way to check if something is
+A, so perhaps we need to wrap the elements in a case class of some
+kind.  In which case the supertype is Iterator[ItWrapped[A]] .]
+
+It would be nice if the estimate est were always an upper bound on the
+number of elements; or at least that if it said 0 the IteratorTree
+could generate nothing else.   (I.e., the buffer is empty and 
+iter.hasNext() is false.)  So, when tryNext produces a list, it would
+be  nice if the new upper bound (see calculation above) were no
+higher than the previous one (:-).  
+
+
+2014-10-21:
+
+Move notation: Key idea is description of a piece type ("PodPower"),
+defined as the set of prongs a pod has, which define the directions it
+can move in.  A piece type is a set of letters from A to H, such as AD
+or EH.  (These are called _prong letters_ in what follows.)
+
+_Locations_ are two digits, cr (column and row).
+
+_Introduction moves_ are either R->loc or C->loc (reserve or captured).
+The former can be abbreviated +loc.
+
+_Prong moves_ are insertions or shifts.  Insertions are written
+loc[r]+p, where p is a prong letter and r is an optional piece type,
+required if there is more than one type at loc.  Shifts are loc+p-q. 
+
+_Motions_ are more complex, since they can involve substacks at a
+point moving in multiple directions.  A _primitive motion_ involve one
+or more piece types present at a location performing a jump series or
+slide.  The pieces moving are indicated by a multiset of piece types,
+indicated by {y1:n1, y2:n2, ...}.  A slide is written m-l2, where
+l1 and l2 are locations and m is a piece-type multiset.  A jump series
+is written m(-l(Xq?)+, where ls are locs, and m and q are
+piece-type multisets.  Optional X means capture occurs at that point;
+q is a piece-type multiset indicating what is captured.  If all are
+captured, q can be omitted.
+
+If multiset entry is of the form y1:1, then the :1 can be omitted.
+If the multiset has just one entry {y:1}, then it can be written as
+y.  (Can X{y,w} be written XyXw?  Can X{y:2} be written XyXy?)
+
+Should the colons be omittable?  Perhaps the numbers should come
+first.  {n1y1, n2y2}.  Is 23{2AB} intelligible?
+
+Move is a location followed by a set of primitive moves l{m1,m2,...}.
+If just one primitive move, braces can be omitted.  If just one
+primitive move, and all the pods at a location are moving, the
+multiset may be omitted entirely.  
+
