@@ -8,19 +8,21 @@ class OctiGame(val rules: OctiRules,
                val first: Player)
 {
   // In reverse-chrono order.  Alternating by player.
-  private var moves: List[MoveRes];
+  private var moves: List[MoveRes] = List();
 
   if (players.length != rules.numPlayers)
     throw new OctiGame.InvalidNumberOfPlayers(rules.numPlayers,
                                               players.length);
 
-  def moveAdd(m: Move) { moves +: m }
+////  def moveAdd(m: Move) { moves +: m }
 
-  def getMoves() = moves.reverse
+  def getMoves = moves.reverse
 
-  def boardHeight() = rules.boardHeight()
+  def boardHeight = rules.boardHeight
 
-  def boardWidth() = rules.boardWidth()
+  def boardWidth = rules.boardWidth
+
+  def numPlayers = rules.numPlayers
 }
 
 object OctiGame
@@ -31,9 +33,9 @@ Rules require ${required}, tried ${tried}""")
 
   val standardHomeSquares =
     Vector(2,6).map
-       (row = >
+       ((row: Int) =>
          ((2 to 6 by 2).toSet.map
-           (col => new Podloc(col, row))))
+           ((col: Int) => new Podloc(col, row))))
 
 }
 
@@ -57,9 +59,9 @@ object OctiJunior
    extends OctiRules(boardWidth = 6, boardHeight = 7,
                      homeSquares =
                        Vector(1,5).
-                         map(row =>
+                         map(row: Int =>
                               ((1 to 4).toSet.map
-                                 (col => new Podloc(col, row)))),
+                                 (col: Int => new Podloc(col, row)))),
                      podReserve = 0,
                      prongReserve = 12,
                      allowStacking = false,
@@ -67,7 +69,7 @@ object OctiJunior
 
 object OctiXFast
   extends OctiRules(boardWidth = 9, boardHeight = 9,
-                    OctiGame.standardHomeSquares,
+                    homeSquares = OctiGame.standardHomeSquares,
                     podReserve = 4,
                     prongReserve = 25,
                     allowStacking = true,
@@ -76,7 +78,7 @@ object OctiXFast
 
 object OctiX
   extends OctiRules(boardWidth = 9, boardHeight = 9,
-                    OctiGame.standardHomeSquares,
+                    homeSquares = OctiGame.standardHomeSquares,
                     podReserve = 4,
                     prongReserve = 25,
                     allowStacking = true,
@@ -88,5 +90,6 @@ object OctiX
 
 /** Records a move and the position it created.  move is null
   * only if res is the initial position.
+*   Change move type to Move once Move.scala is compilable.
   */
-case class MoveRes(move: Move, res: Position)
+case class MoveRes(move: AnyRef, res: Position)

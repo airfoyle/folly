@@ -1,3 +1,5 @@
+import scala.collection.immutable.Vector
+
 class PlayerResources(val podReserve: Int, val prongReserve: Int)
 {
   def podPlus(delta: Int): PlayerResources =

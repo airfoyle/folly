@@ -2,7 +2,7 @@ class Position(val toMove: Player,
                // Vector of row vectors
                val board: Vector[Vector[PodStack]],
                val reserves: Vector[PlayerResources], // One per player
-               val game: Game)
+               val game: OctiGame)
 
 ////               val podReserve: Vector[Int],   // These are arrays because
 ////               val prongReserve: Vector[Int], // there's one per player
@@ -18,12 +18,12 @@ object Position
     {
       val board: Vector[Vector[PodStack]] = 
          (Vector.tabulate[PodStack]
-                (game.rules.BoardHeight, game.rules.BoardWidth)
+                (game.rules.boardHeight, game.rules.boardWidth)
                 ((row:Int, col:Int) =>
                  {
                    val loc = new Podloc(row, col);
                    val x =
-                     (0 to game.numPlayers).
+                     (0 to game.rules.numPlayers).
                        find((i) =>
                             (game.homeSquares[i].contains(loc)));
                    x match
