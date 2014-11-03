@@ -19,7 +19,7 @@ class PodPower(val bits: BitSet = BitSet())
   // a direction to move.  But we count it as one for technical
   // purposes.
   val deltaGrid: Vector[Vector[Boolean]] =
-     bits.map((x: Int) => PodPower.bitGrid(x)).
+     bits.map((x: Int) => ProngPos.bitGrid(x)).
            reduceLeft(ScalaUtils.booleVecTwoOr)
 
   // Does the power include direction i?  The 0 direction is included
@@ -35,30 +35,4 @@ object PodPower
 {
   // Grid of offsets is 3x3 --
   val Size = 3
-
-  // The grids for each prong position.  Each such grid has exactly
-  // one true.
-  val bitGrid: Vector[Vector[Vector[Boolean]]] =
-    // Start with pairs of coordinates of nonfalse entry for each
-    // prong position
-    Vector((0,0), (0,1), (1,1), (1,0),
-           (1,-1), (0,-1), (-1,-1),
-           (-1,0), (-1,1)).
-      map(buildArray)
-
-  private def buildArray(trueDeltaXY: (Int,Int)):Vector[Vector[Boolean]] =
-    trueDeltaXY match
-    {
-      case (trueDeltaX, trueDeltaY) =>
-        Vector.tabulate(Size, Size)((i:Int ,j:Int) =>
-                                      {
-                                        val (deltaX, deltaY) =
-                                          coordsToOffsets(i,j)
-                                        deltaX == trueDeltaX &&
-                                          deltaY == trueDeltaY
-                                      })
-    }
-
-  def coordsToOffsets(i: Int, j: Int):(Int,Int) = (j - 1, i - 1)
-
 }

@@ -10,19 +10,29 @@ class ProngPos(val num: Int)
 object ProngPos
 {
   val letter: Vector[Char] = Vector('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
+
+  // The grids for each prong position.  Each such grid has exactly
+  // one true.
+  val bitGrid: Vector[Vector[Vector[Boolean]]] =
+    // Start with pairs of coordinates of nonfalse entry for each
+    // prong position
+    Vector((0,0), (0,1), (1,1), (1,0),
+           (1,-1), (0,-1), (-1,-1),
+           (-1,0), (-1,1)).
+      map(buildArray)
+
+  private def buildArray(trueDeltaXY: (Int,Int)):Vector[Vector[Boolean]] =
+    trueDeltaXY match
+    {
+      case (trueDeltaX, trueDeltaY) =>
+        Vector.tabulate(Size, Size)((i:Int ,j:Int) =>
+                                      {
+                                        val (deltaX, deltaY) =
+                                          subscriptsToOffsets(i,j)
+                                        deltaX == trueDeltaX &&
+                                          deltaY == trueDeltaY
+                                      })
+    }
+
+  def subscriptsToOffsets(i: Int, j: Int):(Int,Int) = (j - 1, i - 1)
 }
-
-
-
-
-//// object ProngPosTest extends App
-//// {
-//// 
-//// class ProngPos extends Enumeration
-//// {
-////   type ProngPos = Value
-////   val A,B,C,D,E,F,G,H = Value
-//// }
-//// 
-////   println("Maximum ProngPos: " + ProngPos.maxId)
-//// }
