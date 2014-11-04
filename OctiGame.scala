@@ -8,7 +8,8 @@ class OctiGame(val rules: OctiRules,
                val first: Player)
 {
   // In reverse-chrono order.  Alternating by player.
-  private var moves: List[MoveRes] = List();
+  private var moves: List[MoveRes] =
+    List(MoveRes(null, Position.initial(this)));
 
   if (players.length != rules.numPlayers)
     throw new OctiGame.InvalidNumberOfPlayers(rules.numPlayers,
@@ -22,6 +23,8 @@ class OctiGame(val rules: OctiRules,
 
   def boardWidth = rules.boardWidth
 
+  def homeSquares = rules.homeSquares
+
   def numPlayers = rules.numPlayers
 }
 
@@ -31,13 +34,19 @@ object OctiGame
      Exception("""Wrong number of players for game:
 Rules require ${required}, tried ${tried}""")
 
-  val standardHomeSquares =
-    Vector(2,6).map
+  val standardHomeSquares: Vector[Set[Podloc]] =
+    (Vector(2,6).map
        ((row: Int) =>
          ((2 to 6 by 2).toSet.map
-           ((col: Int) => new Podloc(col, row))))
+           ((col: Int) => new Podloc(col, row)))))
 
 }
+
+/** Records a move and the position it created.  move is null
+  * only if res is the initial position.
+  */
+case class MoveRes(move: Move, res: Position)
+
 
 // Describes which rules we're operating under
 class OctiRules(val numPlayers: Int = 2,
@@ -58,10 +67,10 @@ class OctiRules(val numPlayers: Int = 2,
 object OctiJunior
    extends OctiRules(boardWidth = 6, boardHeight = 7,
                      homeSquares =
-                       Vector(1,5).
-                         map(row: Int =>
+                       Vector(1,5).map
+                           ((row: Int) =>
                               ((1 to 4).toSet.map
-                                 (col: Int => new Podloc(col, row)))),
+                                 ((col: Int) => new Podloc(col, row)))),
                      podReserve = 0,
                      prongReserve = 12,
                      allowStacking = false,
@@ -88,8 +97,3 @@ object OctiX
 // To extend to 4-player game, you need another slot, allies,
 // a list of Ints specifying which other players are on your side.
 
-/** Records a move and the position it created.  move is null
-  * only if res is the initial position.
-*   Change move type to Move once Move.scala is compilable.
-  */
-case class MoveRes(move: AnyRef, res: Position)

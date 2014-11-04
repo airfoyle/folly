@@ -2,11 +2,11 @@ import scala.collection.immutable
 import scala.collection.immutable.{Vector, List, Map, ListMap}
 
 class PodStack(val owner: Player,
-               val pods: MultiSet[PodPower] =
-                 new MultiSet[PodPower](new PodPower() -> 1))
+               val pods: Multiset[PodPower] =
+                 new Multiset[PodPower](new PodPower() -> 1))
 {
   // Map specifying for each sort of pod, how many we have in a pile --
-  type PodSet = MultiSet[PodPower]    // ListMap[PodPower, Int]
+  type PodSet = Multiset[PodPower]    // ListMap[PodPower, Int]
 
   // pods Represents a multiset giving (positive) numbers of occurrences
   // of pods of a given power in this stack.  
@@ -37,9 +37,9 @@ class PodStack(val owner: Player,
 object PodStack
 {
   // Map specifying for each sort of pod, how many we have in a pile --
-  type PodSet = MultiSet[PodPower]
+  type PodSet = Multiset[PodPower]
 
-  private val emptyPodSet:PodSet = new MultiSet[PodPower]()
+  private val emptyPodSet:PodSet = new Multiset[PodPower]()
 
   import ScalaUtils._
 

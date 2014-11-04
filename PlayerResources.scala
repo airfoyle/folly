@@ -12,8 +12,8 @@ class PlayerResources(val podReserve: Int, val prongReserve: Int)
 object PlayerResources
 {
   def initial(game: OctiGame): Vector[PlayerResources] =
-    (0 until (game.rules.numPlayers)).map
-      (i => new PlayerResources(game.rules.podReserve,
-                                game.rules.prongReserve)).
-      toVector
+    (((0 until (game.rules.numPlayers)).map
+         ((i: Int) => new PlayerResources(game.rules.podReserve,
+                                          game.rules.prongReserve))).
+      toVector)
 }

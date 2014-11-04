@@ -10,10 +10,6 @@ class Position(val toMove: Player,
 
 object Position
 {
-  private def holdsPods(colOffset:Int):Boolean =
-     (colOffset / OctiConst.HomeSpacing < OctiConst.initNumPods) &&
-     (colOffset % OctiConst.HomeSpacing == 0)
-
   def initial(game: OctiGame): Position =
     {
       val board: Vector[Vector[PodStack]] = 
@@ -25,7 +21,7 @@ object Position
                    val x =
                      (0 to game.rules.numPlayers).
                        find((i) =>
-                            (game.homeSquares[i].contains(loc)));
+                            (game.homeSquares(i).contains(loc)));
                    x match
                    {
                      case Some(i) => new PodStack(game.players(i))

@@ -1,4 +1,6 @@
-// Constants used in Octi
+// Constants used in Octi.
+// Most of these have moved to OctiRules (in OctiGame.scala).
+// The stragglers should probably go there, too.
 object OctiConst
 {
   val NumDirs = 8    // hence the name of the game ...

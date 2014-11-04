@@ -26,13 +26,8 @@ class PodPower(val bits: BitSet = BitSet())
   // in every power.
   def includes(i: Int) = i== 0 || bits(i)
 
-  def addProng(i: Int):PodPower =
+  def addProng(i: Int): PodPower =
     new PodPower(bits + i)
 
 }
 
-object PodPower
-{
-  // Grid of offsets is 3x3 --
-  val Size = 3
-}

@@ -8,6 +8,10 @@ case class Podloc(val x:Int, val y:Int)
      y >= 0 && y < game.boardHeight)
   }
 
+////  def near(loc: Podloc, delta: Int, game: Octigame)
+
+
+
 }
 
 object Podloc

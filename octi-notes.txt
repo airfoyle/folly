@@ -1,6 +1,10 @@
+2014-11-03:
+
+Why do we need ProngPos.bitGrid?  So we can OR them?  Why not use the 
+
 2014-10-30:
 
-Why MultiSet instead of Multiset??
+Why MultiSet instead of Multiset?? [fixed]
 
 An abstraction that might come in handy:  IteratorTree[+A] --
 An Iterator[AnyRef] iter plus an estimate est: Int of how many elements can be
