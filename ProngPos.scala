@@ -17,6 +17,11 @@ object ProngPos
 
   val letter: Vector[Char] = Vector('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
 
+  val forDelta: Vector[Vector[ProngPos]] =
+    Vector(Vector(8, 1, 2),
+           Vector(7, 0, 3),
+           Vector(6, 5, 4))
+
   // The grids for each prong position.  Each such grid has exactly
   // one true.
   val bitGrid: Vector[Vector[Vector[Boolean]]] =
@@ -50,5 +55,11 @@ object ProngPos
     * directions on the board.  Scala only allows subscripts starting
     * from 0, or we would have used -1:1 in the first place.
     */
-  def subscriptsToOffsets(i: Int, j: Int):(Int,Int) = (j - 1, i - 1)
+  def subscriptsToOffsets(i: Int, j: Int): (Int,Int) = (j - 1, i - 1)
+
+  /** Converts directions on the board to subscripts in the
+    * bitGrid and forDelta arrays.
+    */
+  def offsetsToSubscripts(deltaX: Int, deltaY: Int): (Int,Int) =
+    (deltaX + 1, deltaY + 1)
 }

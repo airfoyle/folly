@@ -42,6 +42,7 @@ class Slide(val mover: PodStack,
   def isLegal(pos: Position):
       Boolean =
     {
+      
       dest.onBoard(pos.game) && dest.near(start, 1, pos.game)
       && dest.freeForPiece(mover.owner, pos.game)
     }

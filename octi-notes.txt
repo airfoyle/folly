@@ -1,6 +1,11 @@
+2014-11-06:
+
+ProngPos could be renamed OctiDir.  It's used in a more general way
+than the current name suggests.
+
 2014-11-03:
 
-Why do we need ProngPos.bitGrid?  So we can OR them?  Why not use the 
+Why do we need ProngPos.bitGrid?  So we can OR them?  
 
 2014-10-30:
 

@@ -8,7 +8,41 @@ case class Podloc(val x:Int, val y:Int)
      y >= 0 && y < game.boardHeight)
   }
 
-////  def near(loc: Podloc, delta: Int, game: Octigame)
+  // If loc is on board, and delta steps away in some direction
+  // return that direction, else None.  The game must be supplied
+  // to give the board dimensions and whether wrap-around moves
+  // are legal.
+  def nearDir(loc: Podloc, near: Int, game: Octigame): Option(ProngPos) =
+  {
+    if (loc.onBoard(game))
+      {
+        def nearDelta(deltaX: Int, deltaY: Int):Boolean =
+          {
+            Math.abs(deltaX) == near && deltaY == 0 ||
+            deltaX == 0 && Math.abs(deltaY) == near ||
+            Math.abs(deltaX) == near && Math.abs(deltaY) == near
+          }
+
+        val deltaX = loc.x - x;
+        val deltaY = loc-y - y;
+        if (nearDelta(deltaX, deltaY))
+          {
+            Some(ProngPos.dirFor(deltaX / near, deltaY / near))
+          }
+          else if (game.rules.wrapAround)
+            {
+              // Boost deltaX and deltaY into the positive realm,
+              // find the remainder modulo boardWidth, and try again --
+              val deltaX2 = (deltaX + game.boardWidth) % game.boardWidth;
+              val deltaY2 = (deltaY + game.boardHeight) % game.boardHeight;
+              if (nearDelta(deltaX2, deltaY2))
+                Some(ProngPos.dirFor(deltaX2 / near, deltaY2 / near))
+              else None
+            }
+          else None
+      }
+      else None
+  }
 
 
 
