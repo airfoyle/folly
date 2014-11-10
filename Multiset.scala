@@ -21,7 +21,7 @@ class Multiset[A](val u: ListMap[A, Int])
 
   def numberOf(x: A): Int = this.getOrElse(x, 0)
 
-  override def get(k: A) = Some(underlying.getOrElse(k, 0))
+  override def get(k: A) = Some(underlying.numberOf(k))
 
   override def +[B >: Int](kv: (A, B)) =
     kv match
@@ -34,9 +34,40 @@ class Multiset[A](val u: ListMap[A, Int])
       }
 
   override def entryPlus(k: A, n: Int): Multiset[A] =
+  {
+    val adjustedN = max(n, -(numberOf(k)));
     super.entryPlus(k, n).asInstanceOf[Multiset[A]]
+  }
 
   override def tail:Multiset[A] = super.tail.asInstanceOf[Multiset[A]]
+
+  /** Returns the multiset union of this and other.
+    */
+  def setPlus(other: MultiSet[A]): MultiSet[A] =
+    {
+      def numEither(k: A): Int = numberOf(k) + other.numberOf(k)
+
+      val keysThis: Set[A] = keySet;
+      val keysOther: Set[A] = other.keySet;
+
+      new MultiSet(new IntMap(keysThis.map(k => (k -> numEither(k)))
+                              ++ keysOther.map(k => (k -> numEither(k)))))
+    }
+
+  def setMinus(other: MultiSet[A]): MultiSet[A] =
+    {
+      def numThis(k: A): Int = numberOf(k)
+
+      def numOther(k: A): Int = other.numberOf(k)
+
+      val keysThis: Set[A] = keySet;
+      new MultiSet(new IntMap(keysThis.map(k => (k ->
+                                                 max(0,
+                                                     (numThis(k)
+                                                      - numOther(k)))))))
+    }
+
+
 
   override def toString(): String =
     "Multiset{" + this.map{ case (k, i: Int) =>
